@@ -50,11 +50,11 @@ if __name__ is '__main__':
         elif reward <= -1:
             fire_n -= 1
         state = state_1
-        plt.imshow(state)
+        plt.imshow(state_1)
         plt.text(30.0, 5.0, 'Gamma Zhu')
         plt.text(32.0, 79.0, 'reward:{:.2f}'.format(reward_sum))
         plt.text(32.0, 83.0, 'goal:{} fire:{}'.format(gold_n, fire_n))
-        plt.pause(0.01)
-        plt.ioff()
+        plt.pause(0.05)
+        plt.clf()
         
 
