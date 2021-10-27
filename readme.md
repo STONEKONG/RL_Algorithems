@@ -1,5 +1,5 @@
-# Gride world game
-This is an easy example of gride world game based on deep q networks. In this world, the agent learns to search gold and elude fire.
+# Grid world game
+This is an easy example of grid world game based on deep q networks. In this world, the agent learns to search gold and elude fire.
 
 ### Train
 ```
