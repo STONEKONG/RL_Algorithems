@@ -3,7 +3,7 @@ This is an easy example of grid world game based on deep q networks. In this wor
 
 ### Train
 ```
-python3 Deep Q-Networks.py
+python3 deep_q_networks.py
 ```
 ### Generate pb file
 ```
