@@ -1,27 +1,12 @@
 
-# from os import terminal_size
-# import re
+
 import numpy as np
-# from tensorflow.python.ops.math_ops import reduce_all 
 from gridworld import game_env
 import matplotlib.pyplot as plt 
-# import cv2 
 import os 
 import tensorflow as tf 
-# from tensorflow.python.framework import graph_util
 from tensorflow.python.platform import gfile
-
-reward_dict = {
-        'fire': -2, 
-        'goal': 1, 
-        'dency': -0.1,
-        'penalize': -0.5
-    }
-env = game_env(partial=False, reward_dict=reward_dict, size=7)
-# env = game_env(partial=False, size=7)
-# env_r = game_env(partial=False, size=7)
-plt.ion()
-# state = env.reset()
+import yaml 
 
 def inference(image, pb_path):
     image_list = np.expand_dims(image, axis=0)
@@ -40,34 +25,36 @@ def inference(image, pb_path):
     Q_value = sess.run(output, feed_dict={input_1:image_list})
     return Q_value
 
-pb_path = 'agent-9500.pb'
+if __name__ is '__main__':
 
-state = env.reset()
-# state_r = env_r.reset()
-reward_sum = 0
-# reward_sum_r = 0
-correct = 0
-fault = 0
-# correct_r = 0
-# fault_r = 0
-random = False
-while True:
-    action_r = np.random.randint(0,4) 
-    Q_value = inference(state, pb_path)
-    action = np.argmax(Q_value, axis=1)[0]
-    state_1, reward, d = env.step(action)
-    reward_sum += reward
-    print(reward)
-    if reward > 0:
-        correct += 1
-    elif reward <= -2:
-        fault -= 1
-    plt.imshow(state_1)
-    plt.text(28.0, 5.0, 'Gamma Zhu')
-    plt.text(28.0, 79.0, 'reward:{:.2f}'.format(reward_sum))
-    plt.text(24.0, 84.0, 'goal:{} fire:{}'.format(correct, fault))
-    plt.pause(0.1)
-    plt.clf()
-    state = state_1
-    print(reward)
+    pb_path = 'agent.ckpt-227-42.46.pb'
+    env_config_path = 'env_config.yaml'
+    with open(env_config_path, 'r', encoding='utf-8') as f:
+        env_config = yaml.load(f)
+    env = game_env(env_config)
+    
+    state = env.state
+    reward_sum = 0
+    gold_n = 0
+    fire_n = 0
+    random = False
+    plt.ion()
+    while True:
+        action_r = np.random.randint(0,4) 
+        Q_value = inference(state, pb_path)
+        action = np.argmax(Q_value, axis=1)[0]
+        state_1, reward, d = env.step(action)
+        reward_sum += reward
+        if reward > 0:
+            gold_n += 1
+        elif reward <= -1:
+            fire_n -= 1
+        state = state_1
+        plt.imshow(state)
+        plt.text(30.0, 5.0, 'Gamma Zhu')
+        plt.text(32.0, 79.0, 'reward:{:.2f}'.format(reward_sum))
+        plt.text(32.0, 83.0, 'goal:{} fire:{}'.format(gold_n, fire_n))
+        plt.pause(0.01)
+        plt.ioff()
+        
 

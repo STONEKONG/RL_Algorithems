@@ -4,7 +4,7 @@ import numpy as np
 import itertools
 from PIL import Image
 import matplotlib.pyplot as plt 
-
+import yaml 
 class game_ob():
     def __init__(self, coordinates, size, intensity, channel, reward, name):
         self.x = coordinates[0]
@@ -17,22 +17,22 @@ class game_ob():
         
 
 class game_env():
-    def __init__(self, partial, reward_dict, size):
+    def __init__(self, env_config):
 
-        self.size_x = size
-        self.size_y = size
+        self.size_x = env_config['world_size'][0]
+        self.size_y = env_config['world_size'][1]
         self.actions = 4 
         self.objects = []
-        self.partial = partial
+        self.partial = env_config['partial']
         self.points = self.generate_points()
-        self.num_hero = 1
-        self.num_fire = 2
-        self.num_goal = 4
-        self.state = self.reset()
-        self.dency = reward_dict['dency']
-        self.reward_goal = reward_dict['goal']
-        self.reward_fire = reward_dict['fire']
-        self.reward_penalize = reward_dict['penalize']
+        self.num_hero = env_config['role_params']['hero_num']
+        self.num_fire = env_config['role_params']['fire_num']
+        self.num_goal = env_config['role_params']['goal_num']
+        self.reset()
+        self.dency = env_config['reward_params']['dency'] 
+        self.reward_goal = env_config['reward_params']['goal'] 
+        self.reward_fire = env_config['reward_params']['fire'] 
+        self.penalize = env_config['reward_params']['penalize'] 
         
     def reset(self):
         self.objects = []
@@ -45,9 +45,8 @@ class game_env():
         for _ in range(self.num_goal):
             obj = game_ob(self.new_position(), 1, 1, 1, 1, 'goal')
             self.objects.append(obj)
-        state = self.render_env()
-        self.state = state
-        return state
+        self.state = self.render_env()
+     
 
     def move_char(self, direction):
         # 0 - up, 1 - down, 2 - left, 3 - right
@@ -64,7 +63,7 @@ class game_env():
         if direction == 3 and hero.x <= self.size_x-2:
             hero.x += 1     
         if hero.x == heroX and hero.y == heroY:
-            penalize = self.reward_penalize
+            penalize = self.penalize
         self.objects[0] = hero
         return penalize
 
@@ -131,11 +130,11 @@ class game_env():
 
 if __name__ == '__main__':
 
-    reward_dict = {
-        'fire': -2, 
-        'goal': 1, 
-        'dency': -0.1,
-        'penalize': -0.5
-    }
 
-    env = game_env(partial=False, reward_dict=reward_dict, size=7)
+    config_path = 'env_config.yaml'
+
+    with open(config_path, 'r', encoding='utf-8') as f:
+        config = yaml.load(f)
+
+
+    env = game_env(config)

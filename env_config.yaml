@@ -1,0 +1,16 @@
+
+
+reward_params:
+    goal: 1.0
+    fire: -2.0
+    dency: -0.1
+    penalize: -0.5
+
+role_params:
+    hero_num: 1
+    goal_num: 4
+    fire_num: 4
+    
+world_size: [7, 7]
+partial: False
+    
