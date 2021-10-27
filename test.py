@@ -27,7 +27,7 @@ def inference(image, pb_path):
 
 if __name__ is '__main__':
 
-    pb_path = 'agent.ckpt-227-42.46.pb'
+    pb_path = 'agent.ckpt-991-41.41.pb'
     env_config_path = 'env_config.yaml'
     with open(env_config_path, 'r', encoding='utf-8') as f:
         env_config = yaml.load(f)
@@ -42,7 +42,11 @@ if __name__ is '__main__':
     while True:
         action_r = np.random.randint(0,4) 
         Q_value = inference(state, pb_path)
-        action = np.argmax(Q_value, axis=1)[0]
+        if np.random.rand(1) < 0.1:
+            action = np.random.randint(0,4)
+        else:
+            action = np.argmax(Q_value, axis=1)[0]
+        
         state_1, reward, d = env.step(action)
         reward_sum += reward
         if reward > 0:
