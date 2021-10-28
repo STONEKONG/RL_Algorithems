@@ -92,7 +92,7 @@ class main():
             op_holder.append(tfVars[idx+total_vars//2].assign())
         return op_holder
 
-    def updateTarget(self, op_holder, sess):
+    def update_target(self, op_holder, sess):
         for op in op_holder:
             sess.run(op)
 
@@ -179,7 +179,7 @@ class main():
                             }
                         )
                         if total_step % args.update_freq == 0:
-                            self.updateTarget(target_Ops, sess)
+                            self.update_target(target_Ops, sess)
                     reward_sum += reward
                     state = state_1
                     if d == True:
@@ -201,7 +201,7 @@ class main():
                     
 def Args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--episodes', type=int, default=5000, help='')
+    parser.add_argument('--episodes', type=int, default=10000, help='')
     parser.add_argument('--batch_size', type=int, default=32, help='')
     parser.add_argument('--l_r', type=float, default=0.0001, help='')
     parser.add_argument('--gamma', type=float, default=0.99, help='')
@@ -210,11 +210,11 @@ def Args():
     parser.add_argument('--h_size', type=int, default=512, help='')
     parser.add_argument('--buffer_size', type=int, default=50000, help='')
     parser.add_argument('--pre_train_step', type=int, default=10000, help='')
-    parser.add_argument('--update_freq', type=int, default=4, help='')
+    parser.add_argument('--update_freq', type=int, default=40, help='')
     parser.add_argument('--max_epsilon', type=float, default=1.0, help='')
     parser.add_argument('--min_epsilon', type=float, default=0.15, help='')
     parser.add_argument('--decay_step', type=float, default=10000, help='')
-    parser.add_argument('--max_episode_len', type=int, default=200, help='')
+    parser.add_argument('--max_episode_len', type=int, default=80, help='')
     parser.add_argument('--tau', type=float, default=0.001)
     parser.add_argument('--load_model', type=bool, default=False)
 
