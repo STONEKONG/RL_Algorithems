@@ -106,16 +106,13 @@ class game_env():
     def render_env(self):
         board = np.ones([self.size_y+2, self.size_x+2, 3])
         board[1:-1, 1:-1, :] = 0
-        hero = None
         for item in self.objects:
             board[item.y+1:item.y+item.size+1, item.x+1:item.x+item.size+1, item.channel] = item.intensity
-            if item.name == 'hero':
-                hero = item
         board = Image.fromarray(np.uint8(255 * board))
         board = np.array(board.resize((84, 84), Image.NEAREST))
         return board
 
-    def step(self,action):
+    def step(self, action):
         penalty = self.move_char(action) 
         reward,done = self.check_goal()
         state = self.render_env()
