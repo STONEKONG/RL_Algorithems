@@ -19,21 +19,20 @@ class game_ob():
 class game_env():
     def __init__(self, env_config):
 
+        self.actions = 4 
+        self.objects = []     
         self.size_x = env_config['world_size'][0]
         self.size_y = env_config['world_size'][1]
-        self.actions = 4 
-        self.objects = []
-        self.partial = env_config['partial']
-        self.points = self.generate_points()
         self.num_hero = env_config['role_params']['hero_num']
         self.num_fire = env_config['role_params']['fire_num']
         self.num_goal = env_config['role_params']['goal_num']
-        self.reset()
         self.dency = env_config['reward_params']['dency'] 
         self.reward_goal = env_config['reward_params']['goal'] 
         self.reward_fire = env_config['reward_params']['fire'] 
         self.penalize = env_config['reward_params']['penalize'] 
-        
+        self.points = self.generate_points()
+        self.reset()
+
     def reset(self):
         self.objects = []
         for _ in range(self.num_hero):
@@ -112,8 +111,6 @@ class game_env():
             board[item.y+1:item.y+item.size+1, item.x+1:item.x+item.size+1, item.channel] = item.intensity
             if item.name == 'hero':
                 hero = item
-        if self.partial == True:
-            board = board[hero.y:hero.y+3, hero.x:hero.x+3, :]
         board = Image.fromarray(np.uint8(255 * board))
         board = np.array(board.resize((84, 84), Image.NEAREST))
         return board

@@ -7,6 +7,7 @@ import os
 import tensorflow as tf 
 from tensorflow.python.platform import gfile
 import yaml 
+import random
 
 def inference(image, pb_path):
     image_list = np.expand_dims(image, axis=0)
@@ -27,26 +28,25 @@ def inference(image, pb_path):
 
 if __name__ is '__main__':
 
-    pb_path = 'agent.ckpt-991-41.41.pb'
+    pb_path = 'agent.ckpt-4015-26.60.pb'
     env_config_path = 'env_config.yaml'
     with open(env_config_path, 'r', encoding='utf-8') as f:
         env_config = yaml.load(f)
     env = game_env(env_config)
-    
+    epsilon = 0.15
     state = env.state
     reward_sum = 0
     gold_n = 0
     fire_n = 0
-    random = False
+    
     plt.ion()
     while True:
-        action_r = np.random.randint(0,4) 
-        Q_value = inference(state, pb_path)
-        if np.random.rand(1) < 0.1:
+        if np.random.rand(1) < epsilon:
             action = np.random.randint(0,4)
         else:
+            Q_value = inference(state, pb_path)
             action = np.argmax(Q_value, axis=1)[0]
-        
+        # 0 - up, 1 - down, 2 - left, 3 - right
         state_1, reward, d = env.step(action)
         reward_sum += reward
         if reward > 0:
