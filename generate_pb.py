@@ -31,9 +31,8 @@ def freeze_graph(input_checkpoint, output_graph):
 
 if __name__ == "__main__":  
 
-    # /home/xzh/Documents/code/utils/tools/Reinforcement_Learning/gride_world/.index
-    # /home/xzh/Documents/code/utils/tools/Reinforcement_Learning/gride_world/dqn/agent.ckpt-2500-11.00000.data-00000-of-00001
-    ckpt_path = 'dqn/agent.ckpt-227-42.46'
-    pb_path = 'dqn/agent.ckpt-227-42.46.pb'
+    
+    ckpt_path = 'dqn/agent.ckpt-4015-26.60'
+    pb_path = 'agent.ckpt-4015-26.60.pb'
 
     freeze_graph(ckpt_path, pb_path)
