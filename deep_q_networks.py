@@ -169,8 +169,8 @@ class main():
                                 }
                         )
                         end_multiplier = -(batch_data[:,4] - 1)
-                        double_Q = Q_value_1[range(args.batch_size), pre_action]
-                        target_Q = batch_data[:,2] + args.gamma * double_Q * end_multiplier
+                        max_Q_1 = Q_value_1[range(args.batch_size), pre_action]
+                        target_Q = batch_data[:,2] + args.gamma * max_Q_1 * end_multiplier
                         _ = sess.run(
                             update_model,
                             feed_dict = {
@@ -202,17 +202,17 @@ class main():
 def Args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--episodes', type=int, default=10000, help='')
-    parser.add_argument('--batch_size', type=int, default=32, help='')
-    parser.add_argument('--l_r', type=float, default=0.0001, help='')
-    parser.add_argument('--gamma', type=float, default=0.99, help='')
+    parser.add_argument('--batch_size', type=int, default=32, help='batch size of training online net')
+    parser.add_argument('--l_r', type=float, default=0.0001, help='learning rate')
+    parser.add_argument('--gamma', type=float, default=0.99, help='the discont rate of reward')
     parser.add_argument('--save_path', type=str, default='./dqn', help='save model path')
-    parser.add_argument('--env_config_path', type=str, default='env_config.yaml', help='save model path')
-    parser.add_argument('--h_size', type=int, default=512, help='')
-    parser.add_argument('--buffer_size', type=int, default=50000, help='')
+    parser.add_argument('--env_config_path', type=str, default='env_config.yaml', help='the config of environment')
+    parser.add_argument('--h_size', type=int, default=512, help='size of hiden space')
+    parser.add_argument('--buffer_size', type=int, default=50000, help='experence buffer size')
     parser.add_argument('--pre_train_step', type=int, default=10000, help='')
-    parser.add_argument('--update_freq', type=int, default=40, help='')
-    parser.add_argument('--max_epsilon', type=float, default=1.0, help='')
-    parser.add_argument('--min_epsilon', type=float, default=0.15, help='')
+    parser.add_argument('--update_freq', type=int, default=40, help='frequency of update target net')
+    parser.add_argument('--max_epsilon', type=float, default=1.0, help='max probility of greedy algorithm')
+    parser.add_argument('--min_epsilon', type=float, default=0.15, help='max probility of greedy algorithm')
     parser.add_argument('--decay_step', type=float, default=10000, help='')
     parser.add_argument('--max_episode_len', type=int, default=80, help='')
     parser.add_argument('--tau', type=float, default=0.001)
