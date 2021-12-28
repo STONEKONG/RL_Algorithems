@@ -7,6 +7,7 @@ import os
 import tensorflow as tf 
 from tensorflow.python.platform import gfile
 import yaml 
+import argparse
 # import random
 
 def inference(image, pb_path):
@@ -26,9 +27,16 @@ def inference(image, pb_path):
     Q_value = sess.run(output, feed_dict={input_1:image_list})
     return Q_value
 
+def Args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--pb_path', type=str,
+                        default='', help='save model path')
+   
+    return parser.parse_args()
+
 if __name__ is '__main__':
 
-    pb_path = 'agent.ckpt-4015-26.60.pb'
+    pb_path = Args().pb_path
     env_config_path = 'ENV/env_config.yaml'
     with open(env_config_path, 'r', encoding='utf-8') as f:
         env_config = yaml.load(f)
