@@ -19,6 +19,7 @@ export PYTHONPATH="$PWD" python3 DQN/test.py
 
 # Rebot arm
 An easy example of rebot arm based on deep deterministic policy gradient. In this world, the agent learns to grab boxes.
+
 <img src=./rebot_arm.png>
 ### Train
 ```bash
