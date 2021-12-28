@@ -1,0 +1,11 @@
+
+
+win_size: [400, 400]  #[h ,w]
+
+action_dim: 3
+arm_length: [90, 60, 50]
+angle_scale: .1
+measuring_scale: 200
+point_size: 15
+grab_counter_thre: 50
+grab_accuary: 0.5
