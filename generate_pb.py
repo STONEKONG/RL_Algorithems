@@ -1,38 +1,43 @@
 import tensorflow as tf 
 from tensorflow.python.framework import graph_util
+import argparse
 
-
-def freeze_graph(input_checkpoint, output_graph):
+def freeze_graph(args):
     '''
     :param input_checkpoint:
     :param output_graph: PB模型保存路径
     :return:
     '''
 
-    output_node_names = "target_net/Q_value"
-    saver = tf.train.import_meta_graph(input_checkpoint + '.meta', clear_devices=True)
+   
+    saver = tf.train.import_meta_graph(args.ckpt_path + '.meta', clear_devices=True)
     graph = tf.get_default_graph() 
-
-    for op in graph.get_operations():
-        print(op.name)
-
+    
     input_graph_def = graph.as_graph_def() 
-    print(input_graph_def.node)
     with tf.Session() as sess:
-        saver.restore(sess, input_checkpoint) 
+        saver.restore(sess, args.ckpt_path) 
         output_graph_def = graph_util.convert_variables_to_constants( 
             sess=sess,
             input_graph_def=input_graph_def,
-            output_node_names=output_node_names.split(","))
+            output_node_names=args.output_node_names.split(","))
  
-        with tf.gfile.GFile(output_graph, "wb") as f: 
+        with tf.gfile.GFile(args.save_path, "wb") as f: 
             f.write(output_graph_def.SerializeToString()) 
         print("%d ops in the final graph." % len(output_graph_def.node)) 
+
+def Args():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--ckpt_path', type=str,
+                        default='./DDPG/ckpt/agent.ckpt-274-39.20', help='ckpt model path')
+    parser.add_argument('--save_path', type=str,
+                        default='./DDPG/agent.ckpt-274-39.20.pb', help='save model path')
+    parser.add_argument('--output_node_names', type=str,
+                        default="target_actor/fully_connected_3/Tanh", help='save model path')
+    return parser.parse_args()
 
 if __name__ == "__main__":  
 
     
-    ckpt_path = 'dqn/agent.ckpt-4015-26.60'
-    pb_path = 'agent.ckpt-4015-26.60.pb'
-
-    freeze_graph(ckpt_path, pb_path)
+    args = Args()
+    freeze_graph(args)

@@ -10,7 +10,7 @@ export PYTHONPATH="$PWD" python3 QDN/deep_q_networks.py
 ```
 ### Generate pb file
 ```bash
-python3 generate_pb.py
+python3 generate_pb.py --output_node_names target_net/Q_value ./DQN/ckpt/**** --save_path ./DQN/***.pb
 ```
 ### Test
 ```bash
@@ -25,6 +25,10 @@ An easy example of rebot arm based on deep deterministic policy gradient. In thi
 ### Train
 ```bash
 export PYTHONPATH="$PWD" DDPG/deep_deterministic_policy_gradient.py
+```
+
+```bash
+python3 generate_pb.py --output_node_names target_actor/fully_connected_3/Tanh --ckpt_path ./DDPG/ckpt/**** --save_path ./DDPG/***.pb
 ```
 
 

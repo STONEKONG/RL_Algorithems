@@ -123,7 +123,7 @@ class main():
 
         epsilon = args.max_epsilon
         step_drop = (args.max_epsilon - args.min_epsilon) / args.decay_step
-        
+
         total_step = 0
         exp_buffer = Experience_Buffer(args.buffer_size)
         r_list = []
@@ -189,7 +189,7 @@ class main():
                 r_list.append(reward_sum)
 
                 mean_reward = np.mean(r_list[-10:])
-                if len(r_list) % 10 == 0:
+                if len(r_list) % 10 == 0 and len(r_list) >= 10:
                     print('****', total_step, mean_reward, epsilon)
 
                 if mean_reward > best_mean_reward:
@@ -210,7 +210,7 @@ def Args():
     parser.add_argument('--gamma', type=float, default=0.99,
                         help='the discont rate of reward')
     parser.add_argument('--save_path', type=str,
-                        default='./dqn', help='save model path')
+                        default='./DQN/ckpt', help='save model path')
     parser.add_argument('--env_config_path', type=str,
                         default='config/gridworld_config.yaml', help='the config of environment')
     parser.add_argument('--h_size', type=int, default=512,

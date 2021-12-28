@@ -34,7 +34,7 @@ class main():
             fc1 = slim.fully_connected(input, 200, activation_fn=tf.nn.relu6)
             fc2 = slim.fully_connected(fc1, 200, activation_fn=tf.nn.relu6)
             fc3 = slim.fully_connected(fc2, 10, activation_fn=tf.nn.relu)
-            actions = slim.fully_connected(fc3, self.a_dim, activation_fn=tf.nn.tanh)
+            actions = slim.fully_connected(fc3, self.a_dim, activation_fn=tf.nn.tanh, scope='actions')
     
         return actions 
 
@@ -106,15 +106,23 @@ class main():
 
         target_actor_ops = self.update_target_graph(t_actor_vars, o_actor_vars)
         target_critic_ops = self.update_target_graph(t_critic_vars, o_critic_vars)
+
         init = tf.global_variables_initializer()
+        saver = tf.train.Saver()
         config = tf.ConfigProto()
         config.gpu_options.allow_growth = True
        
         exp_buffer = Experience_Buffer(args.buffer_size)
         with tf.Session(config=config) as sess:
             sess.run(init)
+            if args.load_model == True:
+                print('Loading Model...')
+                ckpt = tf.train.get_checkpoint_state(args.save_path)
+                saver.restore(sess, ckpt.model_checkpoint_path)
             total_step = 0
             var = args.var
+            r_list = []
+            best_mean_reward = 0
             for episode in range(args.episodes):
                 state = self.env.reset()
                 reward_sum = 0
@@ -158,14 +166,21 @@ class main():
                             self.update_target(target_critic_ops, sess)
                     state = state_
                     reward_sum += reward
-                    if step == args.max_episode_len - 1 or done:
-                        result = "| done" if done else "| ----"
-                        print("Episode:", episode, 
-                              result, 
-                              "|Reward_sum:{}".format(reward_sum),
-                              "Var:{}".format(var))
-                        break
-
+         
+                r_list.append(reward_sum)
+                mean_reward = np.mean(r_list[-10:])
+                result = "| done" if done else "| ----"
+                print("Episode:", episode, 
+                        result, 
+                        "|Reward_sum:{}".format(reward_sum),
+                        "Var:{}".format(var))
+                 
+                if mean_reward > best_mean_reward:
+                    best_mean_reward = mean_reward
+                    model_path = os.path.join(
+                        args.save_path, 'agent.ckpt-%d-%.2f' % (episode, best_mean_reward))
+                    saver.save(sess, model_path)
+                    print("Saved Model in {}".format(model_path))
 
 def Args():
 
@@ -182,14 +197,17 @@ def Args():
                         default=0.0001, help='learning rate')
     parser.add_argument('--gamma', type=float, default=0.9,
                         help='the discont rate of reward')
-    parser.add_argument('--tau', type=float, default=1.0)
-    parser.add_argument('--update_freq', type=int, default=1000,
+    parser.add_argument('--tau', type=float, default=0.001)
+    parser.add_argument('--update_freq', type=int, default=10,
                         help='frequency of update target net')
     parser.add_argument('--var', type=float, default=2.0,
                         help='frequency of update target net')
     parser.add_argument('--min_var', type=float, default=0.05,
                         help='frequency of update target net')
-    parser.add_argument('--is_render', type=bool, default=True)
+    parser.add_argument('--is_render', type=bool, default=False)
+    parser.add_argument('--save_path', type=str,
+                        default='./DDPG/ckpt', help='save model path')
+    parser.add_argument('--load_model', type=bool, default=False)
     return parser.parse_args()
 
 if __name__ == "__main__":
