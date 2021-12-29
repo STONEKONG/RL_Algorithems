@@ -68,7 +68,7 @@ class main():
     def model(self, name):
 
         state = tf.placeholder(
-            shape=[None, 84, 84, 3], dtype=tf.float32, name=name+'state')
+            shape=[None, 84, 84, 3], dtype=tf.float32, name=name+'_state')
         Q_value = self.cnn(state, name)
         predict = tf.argmax(Q_value, 1)
         return {
