@@ -22,7 +22,7 @@ def inference(image, pb_path):
         sess.graph.as_default()
         tf.import_graph_def(graph_def, name='') # 导入计算图
     sess.run(tf.global_variables_initializer())
-    input_1 = sess.graph.get_tensor_by_name('target_netstate:0')
+    input_1 = sess.graph.get_tensor_by_name('target_net_state:0')
     output = sess.graph.get_tensor_by_name('target_net/Q_value:0')
     Q_value = sess.run(output, feed_dict={input_1:image_list})
     return Q_value
