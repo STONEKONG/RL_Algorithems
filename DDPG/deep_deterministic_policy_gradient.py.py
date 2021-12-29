@@ -10,8 +10,6 @@ from utils import Experience_Buffer
 from ENV.rebort_arm import game_env
 
 
-
-
 class main():
     def __init__(self, args):
         self.args = args
@@ -38,7 +36,7 @@ class main():
     
         return actions 
 
-    def critic_net(self, input_s, input_a, compute_grad, name):
+    def critic_net(self, input_s, input_a, name):
 
         with tf.variable_scope(name):
             fc_s = slim.fully_connected(input_s, 200, activation_fn=None)
@@ -89,8 +87,8 @@ class main():
         online_a = self.actor_net(state_h, "online_actor")
         target_a_ = self.actor_net(state_h_, "target_actor")
 
-        online_q = self.critic_net(state_h, action_h, True, "online_critic")
-        target_q_ = self.critic_net(state_h_, target_a_, False, "target_critic")
+        online_q = self.critic_net(state_h, action_h, "online_critic")
+        target_q_ = self.critic_net(state_h_, target_a_, "target_critic")
 
         o_actor_vars = tf.get_collection(tf.GraphKeys.VARIABLES, "online_actor")
         t_actor_vars = tf.get_collection(tf.GraphKeys.VARIABLES, "target_actor")
@@ -204,7 +202,7 @@ def Args():
                         help='frequency of update target net')
     parser.add_argument('--min_var', type=float, default=0.05,
                         help='frequency of update target net')
-    parser.add_argument('--is_render', type=bool, default=False)
+    parser.add_argument('--is_render', type=bool, default=True)
     parser.add_argument('--save_path', type=str,
                         default='./DDPG/ckpt', help='save model path')
     parser.add_argument('--load_model', type=bool, default=False)
