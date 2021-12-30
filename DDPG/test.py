@@ -1,9 +1,6 @@
 import numpy as np
 from ENV.rebort_arm import game_env
-import yaml
-import os 
-import tensorflow as tf 
-from tensorflow.python.platform import gfile
+import yaml 
 import argparse
 from utils import inference
 
