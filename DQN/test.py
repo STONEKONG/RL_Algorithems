@@ -3,41 +3,29 @@
 import numpy as np
 from ENV.gridworld import game_env
 import matplotlib.pyplot as plt 
-import os 
 import tensorflow as tf 
-from tensorflow.python.platform import gfile
 import yaml 
 import argparse
-# import random
+from utils import inference
 
-def inference(image, pb_path):
-    image_list = np.expand_dims(image, axis=0)
-    os.environ['CUDA_VISIBLE_DEVICES'] = '0'
-    config = tf.ConfigProto()
-    config.gpu_options.allow_growth = True
-    sess = tf.Session(config=config)
-    with gfile.FastGFile(pb_path, 'rb') as f:
-        graph_def = tf.GraphDef()
-        graph_def.ParseFromString(f.read())
-        sess.graph.as_default()
-        tf.import_graph_def(graph_def, name='') # 导入计算图
-    sess.run(tf.global_variables_initializer())
-    input_1 = sess.graph.get_tensor_by_name('target_net_state:0')
-    output = sess.graph.get_tensor_by_name('target_net/Q_value:0')
-    Q_value = sess.run(output, feed_dict={input_1:image_list})
-    return Q_value
 
-def Args():
+def test_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--pb_path', type=str,
-                        default='', help='save model path')
-   
+                        default='./DDPG/agent.ckpt-3243-55.03.pb', help='save model path')
+    parser.add_argument('--input_node_name', type=str,
+                        default='state_', help='save model path')
+    parser.add_argument('--output_node_name', type=str,
+                        default='target_actor/fully_connected_3/Tanh', help='save model path')
     return parser.parse_args()
 
 if __name__ is '__main__':
 
-    pb_path = Args().pb_path
-    env_config_path = 'ENV/env_config.yaml'
+    args = test_args()
+    pb_path = args.pb_path
+    input_node_name = args.input_node_name
+    output_node_name = args.output_node_name
+    env_config_path = 'config/gridworld_config.yaml'
     with open(env_config_path, 'r', encoding='utf-8') as f:
         env_config = yaml.load(f)
     env = game_env(env_config)
@@ -52,7 +40,7 @@ if __name__ is '__main__':
         if np.random.rand(1) < epsilon:
             action = np.random.randint(0,4)
         else:
-            Q_value = inference(state, pb_path)
+            Q_value = inference(state, pb_path,input_node_name, output_node_name)
             action = np.argmax(Q_value, axis=1)[0]
         # 0 - up, 1 - down, 2 - left, 3 - right
         state_1, reward, d = env.step(action)
