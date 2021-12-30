@@ -41,6 +41,6 @@ def inference(image, pb_path, input_node_names, output_node_names):
     sess.run(tf.global_variables_initializer())
     input = sess.graph.get_tensor_by_name(input_node_names + ':0')
     output = sess.graph.get_tensor_by_name(output_node_names + ':0')
-    Q_value = sess.run(output, feed_dict={input:image_list})
-    return Q_value
+    return sess.run(output, feed_dict={input:image_list})
+   
 
