@@ -3,6 +3,7 @@
 ```bash
 cd RL_Algorthems
 export PYTHONPATH="$PWD"
+dddd
 ```
 
 # Grid world game
@@ -43,7 +44,6 @@ python3 generate_pb.py --output_node_name target_actor/fully_connected_3/Tanh --
 ```bash
 python3 DDPG/test.py --pb_path 
 ```
-
 
 
 
