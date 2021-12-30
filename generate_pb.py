@@ -29,10 +29,10 @@ def Args():
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--ckpt_path', type=str,
-                        default='./DDPG/ckpt/agent.ckpt-274-39.20', help='ckpt model path')
+                        default='./DDPG/ckpt/agent.ckpt-3243-55.03', help='ckpt model path')
     parser.add_argument('--save_path', type=str,
-                        default='./DDPG/agent.ckpt-274-39.20.pb', help='save model path')
-    parser.add_argument('--output_node_names', type=str,
+                        default='./DDPG/ckpt/agent.ckpt-3243-55.03.pb', help='save model path')
+    parser.add_argument('--output_node_name', type=str,
                         default="target_actor/fully_connected_3/Tanh", help='save model path')
     return parser.parse_args()
 

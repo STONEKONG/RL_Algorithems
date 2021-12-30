@@ -32,7 +32,7 @@ class main():
             fc1 = slim.fully_connected(input, 200, activation_fn=tf.nn.relu6)
             fc2 = slim.fully_connected(fc1, 200, activation_fn=tf.nn.relu6)
             fc3 = slim.fully_connected(fc2, 10, activation_fn=tf.nn.relu)
-            actions = slim.fully_connected(fc3, self.a_dim, activation_fn=tf.nn.tanh, scope='actions')
+            actions = slim.fully_connected(fc3, self.a_dim, activation_fn=tf.nn.tanh)
     
         return actions 
 
