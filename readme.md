@@ -41,7 +41,7 @@ python3 generate_pb.py --output_node_name target_actor/fully_connected_3/Tanh --
 
 ### Test
 ```bash
-python3 python3 DDPG/test.py --pb_path --output_node_name target_actor/fully_connected_3/Tanh --input_node_name state_
+python3 DDPG/test.py --pb_path 
 ```
 
 
