@@ -1,9 +1,6 @@
-
-
 import numpy as np
 from ENV.gridworld import game_env
 import matplotlib.pyplot as plt 
-import tensorflow as tf 
 import yaml 
 import argparse
 from utils import inference
@@ -40,7 +37,7 @@ if __name__ is '__main__':
         if np.random.rand(1) < epsilon:
             action = np.random.randint(0,4)
         else:
-            Q_value = inference(state, pb_path,input_node_name, output_node_name)
+            Q_value = inference(state, pb_path, input_node_name, output_node_name)
             action = np.argmax(Q_value, axis=1)[0]
         # 0 - up, 1 - down, 2 - left, 3 - right
         state_1, reward, d = env.step(action)
