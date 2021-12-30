@@ -187,8 +187,8 @@ def Args():
     parser.add_argument('--buffer_size', type=int,
                         default=5000, help='experence buffer size')
     parser.add_argument('--env_config_path', type=str,
-                        default='config/rebort_arm_config.yaml', help='the config of environment')
-    parser.add_argument('--max_episode_len', type=int, default=200, help='')
+                        default='config/rebort_arm_config.yaml', help='the config path of environment')
+    parser.add_argument('--max_episode_len', type=int, default=200, help='maximal step of each epoisode')
     parser.add_argument('--batch_size', type=int, default=16,
                         help='batch size of training online net')
     parser.add_argument('--l_r', type=float,
@@ -199,9 +199,9 @@ def Args():
     parser.add_argument('--update_freq', type=int, default=10,
                         help='frequency of update target net')
     parser.add_argument('--var', type=float, default=2.0,
-                        help='frequency of update target net')
+                        help='maximal var of actions')
     parser.add_argument('--min_var', type=float, default=0.05,
-                        help='frequency of update target net')
+                        help='minimal var of actions')
     parser.add_argument('--is_render', type=bool, default=True)
     parser.add_argument('--save_path', type=str,
                         default='./DDPG/ckpt', help='save model path')

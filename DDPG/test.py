@@ -10,9 +10,9 @@ def test_args():
     parser.add_argument('--pb_path', type=str,
                         default='./DDPG/agent.ckpt-3243-55.03.pb', help='save model path')
     parser.add_argument('--input_node_name', type=str,
-                        default='state_', help='save model path')
+                        default='state_', help='')
     parser.add_argument('--output_node_name', type=str,
-                        default='target_actor/fully_connected_3/Tanh', help='save model path')
+                        default='target_actor/fully_connected_3/Tanh', help='')
     return parser.parse_args()
 
 if __name__ == "__main__":

@@ -33,7 +33,7 @@ def Args():
     parser.add_argument('--save_path', type=str,
                         default='./DDPG/ckpt/agent.ckpt-3243-55.03.pb', help='save model path')
     parser.add_argument('--output_node_name', type=str,
-                        default="target_actor/fully_connected_3/Tanh", help='save model path')
+                        default="target_actor/fully_connected_3/Tanh", help='')
     return parser.parse_args()
 
 if __name__ == "__main__":  

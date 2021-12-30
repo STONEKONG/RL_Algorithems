@@ -11,9 +11,9 @@ def test_args():
     parser.add_argument('--pb_path', type=str,
                         default='./DQN/agent.ckpt-452-1.85.pb', help='save model path')
     parser.add_argument('--input_node_name', type=str,
-                        default='target_net_state', help='save model path')
+                        default='target_net_state', help='')
     parser.add_argument('--output_node_name', type=str,
-                        default='target_net/Q_value', help='save model path')
+                        default='target_net/Q_value', help='')
     return parser.parse_args()
 
 if __name__ is '__main__':
