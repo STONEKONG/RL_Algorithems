@@ -19,7 +19,7 @@ def freeze_graph(args):
         output_graph_def = graph_util.convert_variables_to_constants( 
             sess=sess,
             input_graph_def=input_graph_def,
-            output_node_names=args.output_node_names.split(","))
+            output_node_names=args.output_node_name.split(","))
  
         with tf.gfile.GFile(args.save_path, "wb") as f: 
             f.write(output_graph_def.SerializeToString()) 
