@@ -1,9 +1,9 @@
 
 
 ```bash
+git clone https://github.com/STONEKONG/RL_Algorithems.git
 cd RL_Algorthems
 export PYTHONPATH="$PWD"
-dddd
 ```
 
 # Grid world game
